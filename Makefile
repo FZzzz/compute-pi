@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -O0 -std=gnu99 -Wall -fopenmp -mavx
+CFLAGS = -O0 -std=gnu99 -Wall -fopenmp -mavx -mfma
 EXECUTABLE = \
 	time_test_baseline time_test_openmp_2 time_test_openmp_4 \
 	time_test_avx time_test_avxunroll \
@@ -26,10 +26,13 @@ check: default
 	time ./time_test_avxunroll
 
 gencsv: default
-	for i in `seq 100000 25000 2500000`; do \
+	for i in `seq 16000 16000 2500000`; do \
 		printf "%d " $$i;\
 		./benchmark_clock_gettime $$i; \
 	done > result_clock_gettime.csv	
 
+plot: gencsv
+	gnuplot error_plot.gp my_plot.gp
+
 clean:
-	rm -f $(EXECUTABLE) *.o *.s result_clock_gettime.csv
+	rm -f $(EXECUTABLE) *.o *.s result_clock_gettime.csv error_rate.txt
