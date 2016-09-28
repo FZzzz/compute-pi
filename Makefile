@@ -11,7 +11,7 @@ default: computepi.o
 	$(CC) $(CFLAGS) computepi.o time_test.c -DOPENMP_4 -o time_test_openmp_4
 	$(CC) $(CFLAGS) computepi.o time_test.c -DAVX -o time_test_avx
 	$(CC) $(CFLAGS) computepi.o time_test.c -DAVXUNROLL -o time_test_avxunroll
-	$(CC) $(CFLAGS) computepi.o benchmark_clock_gettime.c -o benchmark_clock_gettime
+	$(CC) $(CFLAGS) computepi.o benchmark_clock_gettime.c -DUSE_CI -o benchmark_clock_gettime -lm
 
 .PHONY: clean default
 
@@ -26,8 +26,8 @@ check: default
 	time ./time_test_avxunroll
 
 gencsv: default
-	for i in `seq 100 5000 25000`; do \
-		printf "%d," $$i;\
+	for i in `seq 100000 25000 2500000`; do \
+		printf "%d " $$i;\
 		./benchmark_clock_gettime $$i; \
 	done > result_clock_gettime.csv	
 
