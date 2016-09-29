@@ -136,7 +136,7 @@ double compute_pi_leibniz_openmp(size_t n ,int threads)
 
     #pragma omp parallel num_threads(threads)
     {
-        #pragma omp parallel for private(sign) , reduction(+:sum)
+        #pragma omp for private(sign) , reduction(+:sum)
         for (size_t i = 0; i < n; i++) {
             sign = (i % 2 == 0) ? 1 : -1;
             sum += (sign / (2.0 * (double)i + 1.0));
